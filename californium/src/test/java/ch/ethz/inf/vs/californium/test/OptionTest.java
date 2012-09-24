@@ -56,8 +56,8 @@ public class OptionTest {
 
 		int nrRef = 1;
 
-		Option optOneByte = new Option(oneByteValue, nrRef);
-		Option optTwoBytes = new Option(twoBytesValue, nrRef);
+		Option optOneByte = new Option(nrRef, oneByteValue);
+		Option optTwoBytes = new Option(nrRef, twoBytesValue);
 
 		assertEquals(1, optOneByte.getLength());
 		assertEquals(2, optTwoBytes.getLength());
@@ -93,9 +93,9 @@ public class OptionTest {
 
 		int nrRef = 1;
 
-		Option optOneByte = new Option(oneByteValue, nrRef);
-		Option optTwoBytes = new Option(twoBytesValue, nrRef);
-		Option optTwoBytesRef = new Option(twoBytesValue, nrRef);
+		Option optOneByte = new Option(nrRef, oneByteValue);
+		Option optTwoBytes = new Option(nrRef, twoBytesValue);
+		Option optTwoBytesRef = new Option(nrRef, twoBytesValue);
 
 		assertTrue(optTwoBytes.equals(optTwoBytesRef));
 		assertFalse(optTwoBytes.equals(optOneByte));

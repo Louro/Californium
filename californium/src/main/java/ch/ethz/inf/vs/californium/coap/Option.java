@@ -94,12 +94,12 @@ public class Option {
 	/**
 	 * This is a constructor for a new option with a given number, based on a
 	 * given integer value.
-	 * 
-	 * @param val the integer value
 	 * @param nr the option number
+	 * @param val the integer value
+	 * 
 	 * @return A new option with a given number based on a integer value
 	 */
-	public Option(int val, int nr) {
+	public Option(int nr, int val) {
 		setIntValue(val);
 		setOptionNumber(nr);
 	}

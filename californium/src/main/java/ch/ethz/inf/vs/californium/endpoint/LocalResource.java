@@ -37,6 +37,7 @@ import ch.ethz.inf.vs.californium.coap.ObservingManager;
 import ch.ethz.inf.vs.californium.coap.POSTRequest;
 import ch.ethz.inf.vs.californium.coap.PUTRequest;
 import ch.ethz.inf.vs.californium.coap.Request;
+import ch.ethz.inf.vs.californium.util.Properties;
 
 /**
  * The class LocalResource provides the functionality of a CoAP server resource
@@ -55,7 +56,7 @@ import ch.ethz.inf.vs.californium.coap.Request;
  */
 public class LocalResource extends Resource {
 
-	// Constructors ////////////////////////////////////////////////////////////
+// Constructors ////////////////////////////////////////////////////////////
 
 	public LocalResource(String resourceIdentifier, boolean hidden) {
 		super(resourceIdentifier, hidden);
@@ -66,6 +67,40 @@ public class LocalResource extends Resource {
 	}
 
 // Observing ///////////////////////////////////////////////////////////////////
+	
+	private long livenessCheck = Properties.std.getInt("OBSERVING_LIVENESS_INTERVAL");
+	private long lastCheck = -1;
+	
+	private int observeClock = 0;
+
+	/**
+	 * Get the interval in which an observing client should be checked for liveness.
+	 * @return The interval in milliseconds
+	 */
+	public long getLivenessCheck() {
+		return livenessCheck;
+	}
+
+	/**
+	 * Set the interval to check an observing client for liveness.
+	 * 
+	 * @param interval the time in milliseconds
+	 */
+	public void setLivenessCheck(long interval) {
+		this.livenessCheck = interval;
+	}
+
+	public long getLastCheck() {
+		return lastCheck;
+	}
+
+	public void resetLastCheck() {
+		this.lastCheck = System.currentTimeMillis();
+	}
+	
+	public int getObserveClock() {
+		return observeClock;
+	}
 
 	/**
 	 * Calling this method will notify all registered observers. Resources that
@@ -73,8 +108,11 @@ public class LocalResource extends Resource {
 	 * clients will be registered after a successful GET with Observe option.
 	 */
 	protected void changed() {
+		observeClock = (++observeClock) % 0xFFFFFF; // 24-bit observe clock
+		
 		ObservingManager.getInstance().notifyObservers(this);
 	}
+	
 
 // REST Operations /////////////////////////////////////////////////////////////
 

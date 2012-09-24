@@ -625,7 +625,7 @@ public class Message {
 	
 	public void setContentType(int ct) {
 		if (ct != MediaTypeRegistry.UNDEFINED) {
-			setOption(new Option(ct, OptionNumberRegistry.CONTENT_TYPE));
+			setOption(new Option(OptionNumberRegistry.CONTENT_TYPE, ct));
 		} else {
 			removeOptions(OptionNumberRegistry.CONTENT_TYPE);
 		}
@@ -638,7 +638,7 @@ public class Message {
 	
 	public void setAccept(int ct) {
 		if (ct != MediaTypeRegistry.UNDEFINED) {
-			addOption(new Option(ct, OptionNumberRegistry.ACCEPT));
+			addOption(new Option(OptionNumberRegistry.ACCEPT, ct));
 		} else {
 			removeOptions(OptionNumberRegistry.ACCEPT);
 		}
@@ -663,7 +663,7 @@ public class Message {
 	}
 	
 	public void setMaxAge(int timeInSec) {
-		setOption(new Option(timeInSec, OptionNumberRegistry.MAX_AGE));
+		setOption(new Option(OptionNumberRegistry.MAX_AGE, timeInSec));
 	}
 	
 	public String getLocationPath() {
@@ -762,7 +762,7 @@ public class Message {
 			
 			// set content type option
 			if (mediaType!=MediaTypeRegistry.UNDEFINED) {
-				setOption(new Option(mediaType, OptionNumberRegistry.CONTENT_TYPE));
+				setOption(new Option(OptionNumberRegistry.CONTENT_TYPE, mediaType));
 			}
 		}
 	}

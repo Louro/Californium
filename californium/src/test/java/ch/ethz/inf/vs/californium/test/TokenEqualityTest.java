@@ -53,37 +53,37 @@ public class TokenEqualityTest {
 	
 	@Test
 	public void testOneByteToken() {
-		Option t1 = new Option(0xAB, OptionNumberRegistry.TOKEN);
-		Option t2 = new Option(0xAB, OptionNumberRegistry.TOKEN);
+		Option t1 = new Option(OptionNumberRegistry.TOKEN, 0xAB);
+		Option t2 = new Option(OptionNumberRegistry.TOKEN, 0xAB);
 		assertEquals(t1, t2);
 		
 		assertEquals(1, t1.getLength());
 		
-		Option t3 = new Option(0xAC, OptionNumberRegistry.TOKEN);
+		Option t3 = new Option(OptionNumberRegistry.TOKEN, 0xAC);
 		assertFalse(t1.equals(t3)); // Why no assertNotEquals in JUnit?!
 	}
 	
 	@Test
 	public void testTwoByteToken() {
-		Option t1 = new Option(0xABCD, OptionNumberRegistry.TOKEN);
-		Option t2 = new Option(0xABCD, OptionNumberRegistry.TOKEN);
+		Option t1 = new Option(OptionNumberRegistry.TOKEN, 0xABCD);
+		Option t2 = new Option(OptionNumberRegistry.TOKEN, 0xABCD);
 		assertEquals(t1, t2);
 		
 		assertEquals(2, t1.getLength());
 		
-		Option t3 = new Option(0xABCE, OptionNumberRegistry.TOKEN);
+		Option t3 = new Option(OptionNumberRegistry.TOKEN, 0xABCE);
 		assertFalse(t1.equals(t3)); // Why no assertNotEquals in JUnit?!
 	}
 
 	@Test
 	public void testFourByteToken() {
-		Option t1 = new Option(0xABCDEF01, OptionNumberRegistry.TOKEN);
-		Option t2 = new Option(0xABCDEF01, OptionNumberRegistry.TOKEN);
+		Option t1 = new Option(OptionNumberRegistry.TOKEN, 0xABCDEF01);
+		Option t2 = new Option(OptionNumberRegistry.TOKEN, 0xABCDEF01);
 		assertEquals(t1, t2);
 		
 		assertEquals(4, t1.getLength());
 		
-		Option t3 = new Option(0xABCDEF02, OptionNumberRegistry.TOKEN);
+		Option t3 = new Option(OptionNumberRegistry.TOKEN, 0xABCDEF02);
 		assertFalse(t1.equals(t3)); // Why no assertNotEquals in JUnit?!
 	}
 

@@ -56,18 +56,18 @@ public class ObservingManager {
 	
 	private class ObservingRelationship {
 		public String clientID;
-		public String resourcePath;
+		public LocalResource resource;
 		public GETRequest request;
-		public int lastMID;
+		public Response lastNotification;
 		
-		public ObservingRelationship(GETRequest request) {
+		public ObservingRelationship(GETRequest request, LocalResource resource) {
 			
 			request.setMID(-1);
 			
 			this.clientID = request.getPeerAddress().toString();
-			this.resourcePath = request.getUriPath();
+			this.resource = resource;
 			this.request = request;
-			this.lastMID = -1;
+			this.lastNotification = null;
 		}
 	}
 	
@@ -77,32 +77,27 @@ public class ObservingManager {
 
 // Members /////////////////////////////////////////////////////////////////////
 
-	/** Maps a resource path string to the resource's observers stored by client address string. */
+	/* Maps a resource path string to the resource's observers stored by client address string. */
 	private Map<String, Map<String, ObservingRelationship>> observersByResource = new HashMap<String, Map<String, ObservingRelationship>>();
 	
-	/** Maps a peer address string to the clients relationships stored by resource path. */
+	/* Maps a peer address string to the clients relationships stored by resource path. */
 	private Map<String, Map<String, ObservingRelationship>> observersByClient = new HashMap<String, Map<String, ObservingRelationship>>();
-	
-	private int checkInterval = Properties.std.getInt("OBSERVING_REFRESH_INTERVAL");
-	private Map<String, Integer> intervalByResource = new HashMap<String, Integer>();
 	
 // Constructors ////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Default singleton constructor.
-	 */
 	private ObservingManager() {
 	}
 	
+	/**
+	 * Get the ObservingManager singleton.
+	 * 
+	 * @return The instance
+	 */
 	public static ObservingManager getInstance() {
 		return singleton;
 	}
 	
 // Methods /////////////////////////////////////////////////////////////////////
-	
-	public void setRefreshInterval(int interval) {
-		this.checkInterval = interval;
-	}
 	
 	public void notifyObservers(LocalResource resource) {
 
@@ -112,28 +107,20 @@ public class ObservingManager {
 			
 			LOG.info(String.format("Notifying observers: %d @ %s", resourceObservers.size(), resource.getPath()));
 			
-			int check = -1;
+			boolean check = false;
 			
-			// get/initialize
-			if (!intervalByResource.containsKey(resource.getPath())) {
-				check = checkInterval;
-			} else {
-				check = intervalByResource.get(resource.getPath()) - 1;
-			}
-			// update
-			if (check <= 0) {
-				intervalByResource.put(resource.getPath(), checkInterval);
-				LOG.info(String.format("Refreshing observing relationship: %s", resource.getPath()));
-			} else {
-				intervalByResource.put(resource.getPath(), check);
+			if (resource.getLastCheck() < 0) {
+				resource.resetLastCheck();
+			} else if ((System.currentTimeMillis() - resource.getLastCheck()) >= resource.getLivenessCheck()) {
+				check = true;
+				resource.resetLastCheck();
 			}
 			
 			for (ObservingRelationship observer : resourceObservers.values()) {
 				
 				GETRequest request = observer.request;
-						
-				// check
-				if (check<=0) {
+				
+				if (check) {
 					request.setType(messageType.CON);
 				} else {
 					request.setType(messageType.NON);
@@ -141,27 +128,15 @@ public class ObservingManager {
 				
 				// execute
 				resource.performGET(request);
-				prepareResponse(request);
+				request.getResponse().setOption(new Option(OptionNumberRegistry.OBSERVE, resource.getObserveClock()));
+				// store MID for RST matching
+				updateLastMID(request.getPeerAddress().toString(), request.getUriPath(), request.getResponse().getMID());
+				
 				request.sendResponse();
 			}
 		}
 	}
 	
-	
-	private void prepareResponse(Request request) {
-
-		// consecutive response require new MID that must be stored for RST matching
-		if (request.getResponse().getMID()==-1) {
-			request.getResponse().setMID(TransactionLayer.nextMessageID());
-		}
-		
-		// 16-bit second counter
-		int secs = (int) ((System.currentTimeMillis() - request.startTime) / 1000) & 0xFFFF;
-		request.getResponse().setOption(new Option(secs, OptionNumberRegistry.OBSERVE));
-		
-		// store MID for RST matching
-		updateLastMID(request.getPeerAddress().toString(), request.getUriPath(), request.getResponse().getMID());
-	}
 	
 	
 	public synchronized void addObserver(GETRequest request, LocalResource resource) {
@@ -191,7 +166,7 @@ public class ObservingManager {
 		LOG.info(String.format("Established observing relationship: %s @ %s", request.getPeerAddress().toString(), resource.getPath()));
 		
 		// update response
-		request.getResponse().setOption(new Option(0, OptionNumberRegistry.OBSERVE));
+		request.getResponse().setOption(new Option(OptionNumberRegistry.OBSERVE, 0));
 		
 	}
 	

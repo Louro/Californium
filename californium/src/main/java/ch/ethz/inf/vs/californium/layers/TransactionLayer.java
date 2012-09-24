@@ -40,6 +40,7 @@ import java.util.TimerTask;
 import ch.ethz.inf.vs.californium.coap.CodeRegistry;
 import ch.ethz.inf.vs.californium.coap.Message;
 import ch.ethz.inf.vs.californium.coap.ObservingManager;
+import ch.ethz.inf.vs.californium.coap.OptionNumberRegistry;
 import ch.ethz.inf.vs.californium.coap.Response;
 import ch.ethz.inf.vs.californium.coap.UnsupportedRequest;
 import ch.ethz.inf.vs.californium.util.Properties;
@@ -90,7 +91,7 @@ public class TransactionLayer extends UpperLayer {
 
 // Nested Classes //////////////////////////////////////////////////////////////
 
-	/**
+	/*
 	 * Entity class to keep state of retransmissions.
 	 */
 	private static class Transaction {
@@ -98,9 +99,11 @@ public class TransactionLayer extends UpperLayer {
 		RetransmitTask retransmitTask;
 		int numRetransmit;
 		int timeout; // to satisfy RESPONSE_RANDOM_FACTOR
+		
+		boolean isNotification;
 	}
 
-	/**
+	/*
 	 * The MessageCache is a utility class used for duplicate detection and
 	 * reply retransmissions. It is a ring buffer whose size is configured
 	 * through the Californium properties file. 
@@ -115,7 +118,7 @@ public class TransactionLayer extends UpperLayer {
 
 	}
 
-	/**
+	/*
 	 * Utility class to handle timeouts.
 	 */
 	private class RetransmitTask extends TimerTask {
@@ -128,13 +131,13 @@ public class TransactionLayer extends UpperLayer {
 
 		@Override
 		public void run() {
-			handleResponseTimeout(transaction);
+			handleReplyTimeout(transaction);
 		}
 	}
 
 // Static methods //////////////////////////////////////////////////////////////
 
-	/**
+	/*
 	 * Calculates the initial timeout for outgoing confirmable messages.
 	 * 
 	 * @Return the timeout in milliseconds
@@ -289,7 +292,7 @@ public class TransactionLayer extends UpperLayer {
 		ObservingManager.getInstance().removeObserver(msg.getPeerAddress().toString(), msg.getMID());
 	}
 
-	private void handleResponseTimeout(Transaction transaction) {
+	private void handleReplyTimeout(Transaction transaction) {
 
 		final int max = Properties.std.getInt("MAX_RETRANSMIT");
 		
@@ -334,6 +337,7 @@ public class TransactionLayer extends UpperLayer {
 		transaction.msg = msg;
 		transaction.numRetransmit = 0;
 		transaction.retransmitTask = null;
+		transaction.isNotification = msg.getFirstOption(OptionNumberRegistry.OBSERVE)!=null && msg.isReply();
 
 		transactionTable.put(msg.transactionKey(), transaction);
 

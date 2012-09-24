@@ -151,7 +151,7 @@ public class ExampleClient {
 		}
 
 		if (method.equals("OBSERVE")) {
-			request.setOption(new Option(0, OptionNumberRegistry.OBSERVE));
+			request.setOption(new Option(OptionNumberRegistry.OBSERVE, 0));
 			loop = true;
 		}
 

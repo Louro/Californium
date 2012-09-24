@@ -43,11 +43,11 @@ public class BlockOption extends Option {
 	}	
 
 	public BlockOption(int nr) {
-		super(0, nr);
+		super(nr, 0);
 	}
 	
 	public BlockOption(int nr, int num, int szx, boolean m) {
-		super(encode(num, szx, m), nr);
+		super(nr, encode(num, szx, m));
 	}
 
 	public void setValue(int num, int szx, boolean m) {

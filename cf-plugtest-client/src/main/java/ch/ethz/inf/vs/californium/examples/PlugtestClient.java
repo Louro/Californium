@@ -1062,7 +1062,7 @@ public class PlugtestClient {
 
 			success &= checkType(Message.messageType.ACK, response.getType());
 			success &= checkInt(EXPECTED_RESPONSE_CODE, response.getCode(), "code");
-			success &= checkOption(new Option(MediaTypeRegistry.APPLICATION_LINK_FORMAT, OptionNumberRegistry.CONTENT_TYPE), response.getFirstOption(OptionNumberRegistry.CONTENT_TYPE));
+			success &= checkOption(new Option(OptionNumberRegistry.CONTENT_TYPE, MediaTypeRegistry.APPLICATION_LINK_FORMAT), response.getFirstOption(OptionNumberRegistry.CONTENT_TYPE));
 
 			return success;
 		}
@@ -1096,7 +1096,7 @@ public class PlugtestClient {
 
 			success &= checkType(Message.messageType.ACK, response.getType());
 			success &= checkInt(EXPECTED_RESPONSE_CODE, response.getCode(), "code");
-			success &= checkOption(new Option(MediaTypeRegistry.APPLICATION_LINK_FORMAT, OptionNumberRegistry.CONTENT_TYPE), response.getFirstOption(OptionNumberRegistry.CONTENT_TYPE));
+			success &= checkOption(new Option(OptionNumberRegistry.CONTENT_TYPE, MediaTypeRegistry.APPLICATION_LINK_FORMAT), response.getFirstOption(OptionNumberRegistry.CONTENT_TYPE));
 			success &= checkDiscovery(EXPECTED_RT, response.getPayloadString());
 
 			return success;
@@ -1312,7 +1312,7 @@ public class PlugtestClient {
 			// create the request
 			Request request = new Request(CodeRegistry.METHOD_GET, true);
 			// set Observe option
-			request.setOption(new Option(0, OptionNumberRegistry.OBSERVE));
+			request.setOption(new Option(OptionNumberRegistry.OBSERVE, 0));
 			// set the parameters and execute the request
 			executeRequest(request, serverURI, RESOURCE_URI);
 		}
@@ -1461,7 +1461,7 @@ public class PlugtestClient {
 			// create the request
 			Request request = new Request(CodeRegistry.METHOD_GET, true);
 			// set Observe option
-			request.setOption(new Option(0, OptionNumberRegistry.OBSERVE));
+			request.setOption(new Option(OptionNumberRegistry.OBSERVE, 0));
 			// set the parameters and execute the request
 			executeRequest(request, serverURI, RESOURCE_URI);
 		}
@@ -1615,7 +1615,7 @@ public class PlugtestClient {
 			// create the request
 			Request request = new Request(CodeRegistry.METHOD_GET, true);
 			// set Observe option
-			request.setOption(new Option(0, OptionNumberRegistry.OBSERVE));
+			request.setOption(new Option(OptionNumberRegistry.OBSERVE, 0));
 			// set the parameters and execute the request
 			executeRequest(request, serverURI, RESOURCE_URI);
 		}

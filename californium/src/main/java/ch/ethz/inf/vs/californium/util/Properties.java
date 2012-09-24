@@ -104,8 +104,8 @@ public class Properties extends java.util.Properties {
 		// must be power of two between 16 and 1024
 		set("DEFAULT_BLOCK_SIZE", 512); // [bytes]
 
-		// the number of notifications until a CON notification will be used
-		set("OBSERVING_REFRESH_INTERVAL", 10);
+		// the time interval the server checks client liveness with a CON notification
+		set("OBSERVING_LIVENESS_INTERVAL", 24*60*60*1000); // [milliseconds]
 		
 	}
 
