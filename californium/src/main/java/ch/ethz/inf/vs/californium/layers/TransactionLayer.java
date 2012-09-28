@@ -241,7 +241,7 @@ public class TransactionLayer extends UpperLayer {
 	}
 
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 
 		// check if supported
 		if (msg instanceof UnsupportedRequest) {
@@ -346,7 +346,7 @@ public class TransactionLayer extends UpperLayer {
 	}
 
 	@Override
-	protected void doSendMessage(Message msg) throws IOException {
+	protected void doSend(Message msg) throws IOException {
 
 		// set message ID
 		if (msg.getMID() < 0) {

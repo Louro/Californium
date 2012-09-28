@@ -50,7 +50,7 @@ import ch.ethz.inf.vs.californium.util.Properties;
  * The class TransferLayer provides support for
  * <a href="http://tools.ietf.org/html/draft-ietf-core-block">blockwise transfers</a>.
  * <p>
- * {@link #doSendMessage(Message)} and {@link #doReceiveMessage(Message)} do not
+ * {@link #doSend(Message)} and {@link #doReceive(Message)} do not
  * distinguish between clients and server directly, but rather between incoming
  * and outgoing transfers. This saves duplicate code, but introduces rather
  * confusing Request/Response checks at various places.<br/>
@@ -133,7 +133,7 @@ public class TransferLayer extends UpperLayer {
 	//TODO ETag matching
 	
 	@Override
-	protected void doSendMessage(Message msg) throws IOException {
+	protected void doSend(Message msg) throws IOException {
 		
 		int sendSZX = defaultSZX;
 		int sendNUM = 0;
@@ -191,7 +191,7 @@ public class TransferLayer extends UpperLayer {
 	}
 	
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 
 		BlockOption blockIn = null;
 		BlockOption blockOut = null;

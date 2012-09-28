@@ -107,7 +107,7 @@ public class TokenLayer extends UpperLayer {
 	// I/O implementation //////////////////////////////////////////////////////
 	
 	@Override
-	protected void doSendMessage(Message msg) throws IOException { 
+	protected void doSend(Message msg) throws IOException { 
 		
 		// set token option if required
 		if (msg.requiresToken()) {
@@ -128,7 +128,7 @@ public class TokenLayer extends UpperLayer {
 	}	
 	
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 
 		if (msg instanceof Response) {
 

@@ -184,7 +184,7 @@ public class HttpStack extends UpperLayer {
 	 * .vs.californium.coap.Message)
 	 */
 	@Override
-	protected void doSendMessage(Message message) throws IOException {
+	protected void doSend(Message message) throws IOException {
 		// the http stack is intended to send back only coap responses
 		// check if the message is a response
 		if (message instanceof Response) {
@@ -509,7 +509,7 @@ public class HttpStack extends UpperLayer {
 					LOG.info("Started thread 'httpStack worker' to wait the response");
 
 					// send the coap request to the upper layers
-					doReceiveMessage(coapRequest);
+					doReceive(coapRequest);
 				} catch (InvalidMethodException e) {
 					LOG.warning("Method not implemented" + e.getMessage());
 					sendSimpleHttpResponse(httpExchange, HttpTranslator.STATUS_WRONG_METHOD);

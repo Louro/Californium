@@ -70,7 +70,7 @@ public class MatchingLayer extends UpperLayer {
 	// I/O implementation //////////////////////////////////////////////////////
 	
 	@Override
-	protected void doSendMessage(Message msg) throws IOException { 
+	protected void doSend(Message msg) throws IOException { 
 		
 		if (msg instanceof Request) {
 			
@@ -81,7 +81,7 @@ public class MatchingLayer extends UpperLayer {
 	}	
 	
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 
 		if (msg instanceof Response) {
 

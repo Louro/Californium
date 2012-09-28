@@ -224,7 +224,7 @@ public final class CommunicatorFactory {
 		 * ethz.inf.vs.californium.coap.Message)
 		 */
 		@Override
-		protected void doReceiveMessage(Message msg) {
+		protected void doReceive(Message msg) {
 
 			if (msg instanceof Response) {
 				Response response = (Response) msg;
@@ -246,7 +246,7 @@ public final class CommunicatorFactory {
 		 * .inf.vs.californium.coap.Message)
 		 */
 		@Override
-		protected void doSendMessage(Message msg) throws IOException {
+		protected void doSend(Message msg) throws IOException {
 
 			// defensive programming before entering the stack, lower layers
 			// should
@@ -338,7 +338,7 @@ public final class CommunicatorFactory {
 		 * ethz.inf.vs.californium.coap.Message)
 		 */
 		@Override
-		protected void doReceiveMessage(Message message) {
+		protected void doReceive(Message message) {
 
 			if (message instanceof Response) {
 				Response response = (Response) message;
@@ -360,7 +360,7 @@ public final class CommunicatorFactory {
 		 * .inf.vs.californium.coap.Message)
 		 */
 		@Override
-		protected void doSendMessage(Message message) throws IOException {
+		protected void doSend(Message message) throws IOException {
 			// defensive programming before entering the stack, lower layers
 			// should assume a correct message.
 			if (message != null) {

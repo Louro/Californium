@@ -140,7 +140,7 @@ public class UDPLayer extends AbstractLayer {
 // I/O implementation //////////////////////////////////////////////////////////
 
 	@Override
-	protected void doSendMessage(Message msg) throws IOException {
+	protected void doSend(Message msg) throws IOException {
 
 		// retrieve payload
 		byte[] payload = msg.toByteArray();
@@ -166,7 +166,7 @@ public class UDPLayer extends AbstractLayer {
 	}
 
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 	    
 	    System.out.println();
         System.out.println("RCV");
@@ -208,7 +208,7 @@ public class UDPLayer extends AbstractLayer {
                 try {
 
 					// call receive handler
-					receiveMessage(msg);
+					receive(msg);
 					
 				} catch (Exception e) {
 					StringBuilder builder = new StringBuilder();

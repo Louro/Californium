@@ -92,7 +92,7 @@ public class RateControlLayer extends UpperLayer {
 	 * vs.californium.coap.Message)
 	 */
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 		// if the queue wasn't created, the layer only forwards the message to
 		// the lower layer
 		if (messageQueue != null) {
@@ -121,7 +121,7 @@ public class RateControlLayer extends UpperLayer {
 	 * californium.coap.Message)
 	 */
 	@Override
-	protected void doSendMessage(Message msg) throws IOException {
+	protected void doSend(Message msg) throws IOException {
 		// only forward the message to lower layer
 		sendMessageOverLowerLayer(msg);
 

@@ -35,15 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import ch.ethz.inf.vs.californium.coap.Message;
+import ch.ethz.inf.vs.californium.coap.Exchange;
 import ch.ethz.inf.vs.californium.coap.MessageReceiver;
 
 /**
  * An abstract Layer class that enforced a uniform interface for building a
  * layered communications stack.
  * 
- * @author Dominique Im Obersteg, Daniel Pauli, Matthias Kovatsch and Francesco
- *         Corazza
+ * @author Dominique Im Obersteg, Daniel Pauli, Matthias Kovatsch, and Francesco Corazza
  */
 public abstract class AbstractLayer implements Layer {
     
@@ -61,12 +60,19 @@ public abstract class AbstractLayer implements Layer {
         return numMessagesSent;
     }
     
-    @Override
-    public void receiveMessage(Message msg) {
+    public void receive(Exchange ex) {
         
-        if (msg != null) {
+        if (ex != null) {
             ++numMessagesReceived;
-            doReceiveMessage(msg);
+            doReceive(ex);
+        }
+    }
+    
+    public void send(Exchange ex) throws IOException {
+        
+        if (ex != null) {
+            doSend(ex);
+            ++numMessagesSent;
         }
     }
     
@@ -87,15 +93,6 @@ public abstract class AbstractLayer implements Layer {
     }
     
     @Override
-    public void sendMessage(Message msg) throws IOException {
-        
-        if (msg != null) {
-            doSendMessage(msg);
-            ++numMessagesSent;
-        }
-    }
-    
-    @Override
     public void unregisterReceiver(MessageReceiver receiver) {
         
         // remove receiver from list
@@ -104,17 +101,17 @@ public abstract class AbstractLayer implements Layer {
         }
     }
     
-    protected void deliverMessage(Message msg) {
+    protected void deliverMessage(Exchange ex) {
         
         // pass message to registered receivers
         if (receivers != null) {
             for (MessageReceiver receiver : receivers) {
-                receiver.receiveMessage(msg);
+                receiver.receive(ex);
             }
         }
     }
     
-    protected abstract void doReceiveMessage(Message msg);
+    protected abstract void doReceive(Exchange ex);
     
-    protected abstract void doSendMessage(Message msg) throws IOException;
+    protected abstract void doSend(Exchange ex) throws IOException;
 }

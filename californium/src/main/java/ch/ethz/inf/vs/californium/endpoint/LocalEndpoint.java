@@ -248,21 +248,6 @@ public abstract class LocalEndpoint extends Endpoint {
 	protected abstract void createCommunicator();
 
 	/**
-	 * Method to handle the behavior of the endpoint in respect to the option
-	 * proxy-uri. The subclasses can override this method in order to provide a
-	 * different behavior, i.e., manage proxying.
-	 * 
-	 * @param request
-	 * @return false if the proxy-uri is not supported
-	 */
-	// protected boolean manageProxyUriRequest(Request request) {
-	// request.respond(CodeRegistry.RESP_PROXYING_NOT_SUPPORTED);
-	// request.sendResponse();
-	//
-	// return false;
-	// }
-
-	/**
 	 * Method to notify the implementers of this class that a new response has
 	 * been received from a resource.
 	 * 

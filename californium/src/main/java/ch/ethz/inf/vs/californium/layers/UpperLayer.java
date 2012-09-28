@@ -32,7 +32,7 @@ package ch.ethz.inf.vs.californium.layers;
 
 import java.io.IOException;
 
-import ch.ethz.inf.vs.californium.coap.Message;
+import ch.ethz.inf.vs.californium.coap.Exchange;
 
 /**
  * The Class UpperLayer.
@@ -49,44 +49,41 @@ public abstract class UpperLayer extends AbstractLayer {
     /**
      * Send message over lower layer.
      * 
-     * @param msg the msg
+     * @param exchange the Exchange to process
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public void sendMessageOverLowerLayer(Message msg) throws IOException {
+    public void sendMessageOverLowerLayer(Exchange exchange) throws IOException {
         
         // check if lower layer assigned
         if (lowerLayer != null) {
-            
-            lowerLayer.sendMessage(msg);
+            lowerLayer.send(exchange);
         } else {
             System.out.printf("[%s] ERROR: No lower layer present", getClass().getName());
         }
     }
     
     public void setLowerLayer(Layer layer) {
-        // unsubscribe from old lower layer
+        
         if (lowerLayer != null) {
             lowerLayer.unregisterReceiver(this);
         }
         
-        // set new lower layer
         lowerLayer = layer;
         
-        // subscribe to new lower layer
         if (lowerLayer != null) {
             lowerLayer.registerReceiver(this);
         }
     }
     
     @Override
-    protected void doReceiveMessage(Message msg) {
-        // pass message to registered receivers
-        deliverMessage(msg);
+    protected void doReceive(Exchange exchange) {
+        //  by default do nothing and pass exchange to registered receivers
+        deliverMessage(exchange);
     }
     
     @Override
-    protected void doSendMessage(Message msg) throws IOException {
-        // delegate to the lower layer
-        sendMessageOverLowerLayer(msg);
+    protected void doSend(Exchange exchange) throws IOException {
+        // by default do nothing and delegate to the lower layer
+    	sendMessageOverLowerLayer(exchange);
     }
 }

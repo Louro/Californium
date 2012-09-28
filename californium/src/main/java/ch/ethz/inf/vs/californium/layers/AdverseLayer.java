@@ -57,7 +57,7 @@ public class AdverseLayer extends UpperLayer {
 	}
 
 	@Override
-	protected void doSendMessage(Message msg) throws IOException {
+	protected void doSend(Message msg) throws IOException {
 		if (Math.random() >= txPacketLossProbability) {
 			sendMessageOverLowerLayer(msg);
 		} else {
@@ -67,7 +67,7 @@ public class AdverseLayer extends UpperLayer {
 	}
 	
 	@Override
-	protected void doReceiveMessage(Message msg) {
+	protected void doReceive(Message msg) {
 		if (Math.random() >= rxPacketLossProbability) {
 			deliverMessage(msg);
 		} else {

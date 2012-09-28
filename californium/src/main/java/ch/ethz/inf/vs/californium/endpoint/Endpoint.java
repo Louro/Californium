@@ -77,7 +77,7 @@ public abstract class Endpoint implements MessageReceiver, MessageHandler {
      * .inf.vs.californium.coap.Message)
      */
     @Override
-    public void receiveMessage(Message msg) {
+    public void receive(Message msg) {
         msg.handleBy(this);
     }
     
